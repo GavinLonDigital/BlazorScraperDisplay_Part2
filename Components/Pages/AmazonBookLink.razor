@@ -1,0 +1,28 @@
+@using BlazorScraperDisplay.Models
+
+@if(Book !=null)
+{
+    <div class = "col-sm-12 col-md-3 d-flex justify-content-center p-2" style="height=100%;width=100%">
+
+        <div style = "width:200px; height:250px; padding: 15px; ">
+            <a href="@Book.Url" target="_blank" style="text-decoration">
+                <img src="@Book?.ImageURL" class="d-block" style="width:100%, height:100%;">
+            </a>
+                <div class = "row">
+                    <button type="button" class="btn btn-dark mt-2" data-bs-toggle="modal" data-bs-target="#staticBackdrop@(Book?.Id)">
+                        Book Details
+                    </button>
+                </div>
+
+        </div>
+    </div>
+
+}
+
+
+@code {
+    [Parameter]
+    public AmazonBook? Book {get;set;}
+
+
+}

@@ -1,0 +1,35 @@
+﻿@using BlazorScraperDisplay.Models;
+
+
+@if (YouTubeChannels == null || YouTubeChannels.Count == 0)
+{
+    <div class="row">
+       <div class="col-md-12 mb-3">
+            <span class="p-2">Data coming soon...</span>
+        </div>
+    </div>
+
+}
+else
+{
+<div class="row mb-2 mt-2">
+    <div class="col-md-6"><b class="p-2">Channel Name</b></div>
+    <div class="col-md-6"><b class="p-2">Subscribers</b></div>
+</div>
+@foreach (var channel in YouTubeChannels)
+    {
+        <div class="row">
+            <div class="col-md-6"><a href="@channel.Url" target="_blank" class="p-2" style="text-decoration:none">@channel.ChannelName</a></div>
+            <div class="col-md-6"><span  class="p-2">@channel.Subscribers</span></div>
+        </div>
+  
+    }
+}
+
+@code {
+    [Parameter]
+    public int LangId { get; set; }
+
+    [Parameter]
+    public List<YouTubeChannel>? YouTubeChannels { get; set; }
+}

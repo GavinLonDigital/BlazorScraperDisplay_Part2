@@ -1,0 +1,48 @@
+﻿@page "/YouTube"
+@rendermode InteractiveServer
+@using BlazorScraperDisplay.Models;
+@using BlazorScraperDisplay.Services;
+@inject IYouTubeService youtubeService
+
+<div class="mb-4">
+    <h1 style="text-align:center;">TIOBE Programming Language Rankings with <span><img src="images/YouTube.png" style="height:150px;"></span> Channels</h1>
+</div>
+
+@if(progLanguageGroupedBooksYTChannels == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+    @foreach (ProgLanguageGroupedYTChannels rl in progLanguageGroupedBooksYTChannels)
+    {
+        <div class="card mt-2" style="cursor:pointer" @onclick="(()=>ChangeCollapse(rl))">
+            <div>
+                <span><b>@rl.RankOrder</b></span>
+                <img src="@(TIOBEBaseURL + "/" + rl.ImagePath)">
+                <span><b>@rl.LanguageName</b></span>
+            </div>
+
+            <div id="collapse_@(rl.Id)" class="@(rl.Collapse == false ? "collapse" : "")">
+                  <hr />
+
+                  <YTChannels LangId="@rl.Id" YouTubeChannels="@rl.YouTubeChannels" />
+            </div>
+        </div>
+    }
+}
+@code {
+
+    private List<ProgLanguageGroupedYTChannels> progLanguageGroupedBooksYTChannels = null!;
+    private const string TIOBEBaseURL = "https://www.tiobe.com";
+
+    protected override async Task OnInitializedAsync()
+    {
+        progLanguageGroupedBooksYTChannels = await youtubeService.GetGroupedYouTubeChannels();
+    }
+    private void ChangeCollapse(ProgLanguageGroupedYTChannels progLanguageGroupedYTChannels)
+    {
+        progLanguageGroupedYTChannels.Collapse = !progLanguageGroupedYTChannels.Collapse;
+    }
+
+}

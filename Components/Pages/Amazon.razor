@@ -1,0 +1,44 @@
+@rendermode InteractiveServer
+@using BlazorScraperDisplay.Data
+@using BlazorScraperDisplay.Models;
+@using BlazorScraperDisplay.Services;
+@page "/Amazon"
+@inject IAmazonBooksService amazonBooksService
+
+@inject ProgrammingResourcesDBContext programmingResourcesDBContext
+
+@if (progLanguagesGroupedBooks == null)
+{
+    <h2>Loading....</h2>
+}
+else
+{
+    <div class="mb-2">
+        <h1 style="text-align:center;">TIOBE Programming Language Rankings with <span><img src = "images/Amazon.png" style = "height:150px;"></span> Books</h1>
+    </div>
+  
+    <div>
+
+        @foreach(ProgLanguagesGroupedBooks rl in progLanguagesGroupedBooks)
+        {
+            <div class="m-3">
+                <span class="p-2"><b>@rl.RankOrder</b></span>
+                <img src="@(TIOBEBaseURL + "/" + rl.ImagePath)">
+                <span class="p-2"><b>@rl.LanguageName</b></span>
+            </div>
+            <AmazonBooks LangId="@rl.Id" Books = "@rl.AmazonBooks"/>
+        }      
+    </div>
+}
+
+@code {
+    private  List<ProgLanguagesGroupedBooks> progLanguagesGroupedBooks = null!;
+    private const string TIOBEBaseURL = "https://www.tiobe.com";
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        progLanguagesGroupedBooks = await amazonBooksService.GetGroupedAmazonBooks();
+
+    }
+}    
